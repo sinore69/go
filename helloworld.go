@@ -3,19 +3,20 @@ package main
 import (
 	"fmt"
 	"github.com/sinore69/go-packages"
-	)
+)
 
-func main() {
-	i := 0
-	for ; i < 10; i++ {
-		fmt.Print(i)
-		if i == 5 {
-			continue
-
-		}
-	}
+func new() {
+	arr := []int{1, 2, 3, 4, 5}
+	mutate(arr)
 	fmt.Println()
-	fmt.Print(i)
-	j:=gopackages.Print()
-	fmt.Print(j)
+	for _, j := range arr {
+		fmt.Print(j)
+	}
+	fmt.Print(gopackages.Print())
+}
+func mutate(arr []int) {
+	arr[0] = 100
+	for _, j := range arr {
+		fmt.Print(j)
+	}
 }
