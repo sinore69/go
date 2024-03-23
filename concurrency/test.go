@@ -1,4 +1,4 @@
-package main
+package concurrency
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func producer(ch chan<- int,wg *sync.WaitGroup) {
+func Producer(ch chan<- int,wg *sync.WaitGroup) {
 	defer wg.Done()
 	for i := 0; i < 10; i++ {
 		ch <- i // Send data to the channel
@@ -15,19 +15,19 @@ func producer(ch chan<- int,wg *sync.WaitGroup) {
 	close(ch) // Close the channel when done sending data
 }
 
-func consumer(ch <-chan int,wg *sync.WaitGroup) {
+func Consumer(ch <-chan int,wg *sync.WaitGroup) {
 	defer wg.Done()
     for n:=range ch{
 		fmt.Println(n)
 	}
 }
 
-func main() {
+func Main() {
 	wg:=sync.WaitGroup{}
 	ch := make(chan int)
 	wg.Add(2)
-	go producer(ch,&wg)
-	go consumer(ch,&wg)
+	go Producer(ch,&wg)
+	go Consumer(ch,&wg)
 	wg.Wait()
 	// Wait for a keystroke before exiting
 	// fmt.Println("Press any key to exit.")

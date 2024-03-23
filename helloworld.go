@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/sinore69/go-packages"
+	"github.com/sinore69/go/concurrency"
 )
 
 func new() {
@@ -19,4 +20,9 @@ func mutate(arr []int) {
 	for _, j := range arr {
 		fmt.Print(j)
 	}
+}
+
+func main(){
+	concurrency.Main();
+	new()
 }
