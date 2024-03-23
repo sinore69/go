@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"sync"
 	"time"
 )
 
-func producer(ch chan<- int) {
+func producer(ch chan<- int,wg *sync.WaitGroup) {
+	defer wg.Done()
 	for i := 0; i < 10; i++ {
 		ch <- i // Send data to the channel
 		time.Sleep(100 * time.Millisecond)
@@ -13,22 +15,22 @@ func producer(ch chan<- int) {
 	close(ch) // Close the channel when done sending data
 }
 
-func consumer(ch <-chan int) {
-    val, isopen :=<-ch
-    for isopen{
-            fmt.Println(val)
-            val, isopen=<-ch
-        }
+func consumer(ch <-chan int,wg *sync.WaitGroup) {
+	defer wg.Done()
+    for n:=range ch{
+		fmt.Println(n)
+	}
 }
 
 func main() {
+	wg:=sync.WaitGroup{}
 	ch := make(chan int)
-
-	go producer(ch)
-	go consumer(ch)
-
+	wg.Add(2)
+	go producer(ch,&wg)
+	go consumer(ch,&wg)
+	wg.Wait()
 	// Wait for a keystroke before exiting
-	fmt.Println("Press any key to exit.")
-	var input string
-	fmt.Scanln(&input)
+	// fmt.Println("Press any key to exit.")
+	// var input string
+	// fmt.Scanln(&input)
 }
